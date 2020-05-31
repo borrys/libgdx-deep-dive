@@ -1,146 +1,223 @@
 
 assets.png
-size: 1024,64
+size: 128,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 apple
   rotate: false
-  xy: 388, 28
+  xy: 2, 206
   size: 33, 32
   orig: 33, 32
   offset: 0, 0
   index: 2
 apple
   rotate: false
-  xy: 423, 28
+  xy: 71, 206
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 3
 apple
   rotate: false
-  xy: 423, 28
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 5
-apple
-  rotate: false
-  xy: 423, 28
+  xy: 71, 206
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 4
 apple
   rotate: false
-  xy: 457, 28
+  xy: 71, 206
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 5
+apple
+  rotate: false
+  xy: 2, 104
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 6
 apple
   rotate: false
-  xy: 457, 28
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 10
-apple
-  rotate: false
-  xy: 457, 28
+  xy: 2, 104
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 11
 apple
   rotate: false
-  xy: 491, 28
+  xy: 2, 104
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 10
+apple
+  rotate: false
+  xy: 36, 138
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 7
 apple
   rotate: false
-  xy: 491, 28
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 8
-apple
-  rotate: false
-  xy: 491, 28
+  xy: 36, 138
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 9
 apple
   rotate: false
-  xy: 559, 28
+  xy: 36, 138
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 8
+apple
+  rotate: false
+  xy: 70, 138
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 12
 apple
   rotate: false
-  xy: 559, 28
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 17
-apple
-  rotate: false
-  xy: 559, 28
+  xy: 70, 138
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 16
 apple
   rotate: false
-  xy: 593, 28
+  xy: 70, 138
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 17
+apple
+  rotate: false
+  xy: 2, 36
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 13
 apple
   rotate: false
-  xy: 593, 28
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 15
-apple
-  rotate: false
-  xy: 593, 28
+  xy: 2, 36
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: 14
 apple
   rotate: false
-  xy: 627, 28
+  xy: 2, 36
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 15
+apple
+  rotate: false
+  xy: 2, 2
   size: 31, 32
   orig: 31, 32
   offset: 0, 0
   index: 1
 box
   rotate: false
-  xy: 2, 2
+  xy: 36, 44
   size: 28, 24
   orig: 28, 24
   offset: 0, 0
   index: -1
 idle
   rotate: false
-  xy: 525, 28
+  xy: 36, 104
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 run
   rotate: false
-  xy: 2, 28
-  size: 384, 32
-  orig: 384, 32
+  xy: 2, 172
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
-  index: -1
+  index: 4
+run
+  rotate: false
+  xy: 37, 206
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 5
+run
+  rotate: false
+  xy: 37, 206
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 6
+run
+  rotate: false
+  xy: 2, 138
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 7
+run
+  rotate: false
+  xy: 36, 172
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 8
+run
+  rotate: false
+  xy: 36, 172
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 9
+run
+  rotate: false
+  xy: 70, 172
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 10
+run
+  rotate: false
+  xy: 2, 70
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 11
+run
+  rotate: false
+  xy: 2, 70
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 12
+run
+  rotate: false
+  xy: 36, 70
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 1
+run
+  rotate: false
+  xy: 70, 104
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 2
+run
+  rotate: false
+  xy: 70, 104
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: 3
