@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -25,6 +26,7 @@ public class MyGdxGame extends ApplicationAdapter {
   float appleAnimTime = 0;
   boolean running;
   float runningTime = 0;
+  OrthographicCamera camera;
 
   @Override
   public void create() {
@@ -36,6 +38,8 @@ public class MyGdxGame extends ApplicationAdapter {
     appleFrames.removeRange(0, 4);
     appleAnimation = new Animation<TextureRegion>(0.05f, appleFrames, Animation.PlayMode.LOOP);
     runningAnimation = new Animation<TextureRegion>(0.05f, atlas.findRegions("run"), Animation.PlayMode.LOOP);
+
+    camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
   }
 
   @Override
@@ -62,9 +66,14 @@ public class MyGdxGame extends ApplicationAdapter {
     } else {
       runningTime = 0;
     }
+    camera.position.x = playerPosition.x;
+    camera.position.y = playerPosition.y + 200;
 
     Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+    camera.update();
+    batch.setProjectionMatrix(camera.combined);
 
     batch.begin();
     if (running) {
