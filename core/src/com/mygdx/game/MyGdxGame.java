@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -57,6 +58,10 @@ public class MyGdxGame extends ApplicationAdapter {
     } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
       move.y = -speedY * time;
     }
+
+    float cameraScale = Gdx.input.isKeyPressed(Input.Keys.SPACE) ? 2f : 1f;
+    camera.viewportWidth = Gdx.graphics.getWidth() * cameraScale;
+    camera.viewportHeight = Gdx.graphics.getHeight() * cameraScale;
 
     running = !move.isZero();
     playerPosition.add(move);
