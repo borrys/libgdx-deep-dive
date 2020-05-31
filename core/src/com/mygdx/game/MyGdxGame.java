@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -16,8 +17,7 @@ public class MyGdxGame extends ApplicationAdapter {
   TextureRegion box;
   TextureAtlas atlas;
   Animation<TextureRegion> apple;
-  float x = 0;
-  float y = 0;
+  Vector2 playerPosition = new Vector2();
   float speedX = 200f;
   float speedY = 200f;
   float appleAnimTime = 0;
@@ -36,25 +36,27 @@ public class MyGdxGame extends ApplicationAdapter {
   @Override
   public void render() {
     float time = Gdx.graphics.getDeltaTime();
+    Vector2 move = new Vector2();
     if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-      x -= speedX * time;
+      move.x = -speedX * time;
     } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-      x += speedX * time;
+      move.x = speedX * time;
     }
 
     if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-      y += speedY * time;
+      move.y = speedY * time;
     } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-      y -= speedY * time;
+      move.y = -speedY * time;
     }
 
+    playerPosition.add(move);
     appleAnimTime += time;
 
     Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     batch.begin();
-    batch.draw(img, this.x, this.y, 100f, 100f);
+    batch.draw(img, playerPosition.x, playerPosition.y, 100f, 100f);
 
     batch.draw(box, 500, 450, 100f, 100f);
     batch.draw(box, 0, 250, 70f, 70f);
