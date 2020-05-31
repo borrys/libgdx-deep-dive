@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class MyGdxGame extends ApplicationAdapter {
   SpriteBatch batch;
   Texture img;
+  Texture box;
   float x = 0;
   float y = 0;
   float speedX = 200f;
@@ -19,6 +20,7 @@ public class MyGdxGame extends ApplicationAdapter {
   public void create() {
     batch = new SpriteBatch();
     img = new Texture("player/idle.png");
+    box = new Texture("box/box.png");
   }
 
   @Override
@@ -40,7 +42,11 @@ public class MyGdxGame extends ApplicationAdapter {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     batch.begin();
-    batch.draw(img, this.x, this.y,100f, 100f);
+    batch.draw(img, this.x, this.y, 100f, 100f);
+
+    batch.draw(box, 500, 450, 100f, 100f);
+    batch.draw(box, 0, 250, 70f, 70f);
+    batch.draw(box, 650, -30, 130f, 130f);
     batch.end();
   }
 
@@ -48,5 +54,6 @@ public class MyGdxGame extends ApplicationAdapter {
   public void dispose() {
     batch.dispose();
     img.dispose();
+    box.dispose();
   }
 }
