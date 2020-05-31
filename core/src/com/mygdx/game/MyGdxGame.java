@@ -4,13 +4,15 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class MyGdxGame extends ApplicationAdapter {
   SpriteBatch batch;
-  Texture img;
-  Texture box;
+  TextureRegion img;
+  TextureRegion box;
+  TextureAtlas atlas;
   float x = 0;
   float y = 0;
   float speedX = 200f;
@@ -19,8 +21,9 @@ public class MyGdxGame extends ApplicationAdapter {
   @Override
   public void create() {
     batch = new SpriteBatch();
-    img = new Texture("player/idle.png");
-    box = new Texture("box/box.png");
+    atlas = new TextureAtlas("packed/assets.atlas");
+    box = atlas.findRegion("box");
+    img = atlas.findRegion("idle");
   }
 
   @Override
@@ -53,7 +56,6 @@ public class MyGdxGame extends ApplicationAdapter {
   @Override
   public void dispose() {
     batch.dispose();
-    img.dispose();
-    box.dispose();
+    atlas.dispose();
   }
 }
