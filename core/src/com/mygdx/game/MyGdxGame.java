@@ -16,11 +16,14 @@ public class MyGdxGame extends ApplicationAdapter {
   TextureRegion img;
   TextureRegion box;
   TextureAtlas atlas;
-  Animation<TextureRegion> apple;
+  Animation<TextureRegion> appleAnimation;
+  Animation<TextureRegion> runningAnimation;
   Vector2 playerPosition = new Vector2();
   float speedX = 200f;
   float speedY = 200f;
   float appleAnimTime = 0;
+  boolean running;
+  float runningTime = 0;
 
   @Override
   public void create() {
@@ -30,7 +33,8 @@ public class MyGdxGame extends ApplicationAdapter {
     img = atlas.findRegion("idle");
     Array<TextureAtlas.AtlasRegion> appleFrames = atlas.findRegions("apple");
     appleFrames.removeRange(0, 4);
-    apple = new Animation<TextureRegion>(0.05f, appleFrames, Animation.PlayMode.LOOP);
+    appleAnimation = new Animation<TextureRegion>(0.05f, appleFrames, Animation.PlayMode.LOOP);
+    runningAnimation = new Animation<TextureRegion>(0.05f, atlas.findRegions("run"), Animation.PlayMode.LOOP);
   }
 
   @Override
@@ -49,20 +53,30 @@ public class MyGdxGame extends ApplicationAdapter {
       move.y = -speedY * time;
     }
 
+    running = !move.isZero();
     playerPosition.add(move);
     appleAnimTime += time;
+    if (running) {
+      runningTime += time;
+    } else {
+      runningTime = 0;
+    }
 
     Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     batch.begin();
-    batch.draw(img, playerPosition.x, playerPosition.y, 100f, 100f);
+    if (running) {
+      batch.draw(runningAnimation.getKeyFrame(runningTime), playerPosition.x, playerPosition.y, 100f, 100f);
+    } else {
+      batch.draw(img, playerPosition.x, playerPosition.y, 100f, 100f);
+    }
 
     batch.draw(box, 500, 450, 100f, 100f);
     batch.draw(box, 0, 250, 70f, 70f);
     batch.draw(box, 650, -30, 130f, 130f);
 
-    batch.draw(apple.getKeyFrame(appleAnimTime), 300, 350, 75, 75);
+    batch.draw(appleAnimation.getKeyFrame(appleAnimTime), 300, 350, 75, 75);
 
     batch.end();
   }
