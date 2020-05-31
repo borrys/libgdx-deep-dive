@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class MyGdxGame extends ApplicationAdapter {
+  private static final float PLAYER_SIZE = 100f;
   SpriteBatch batch;
   TextureRegion img;
   TextureRegion box;
@@ -67,7 +68,13 @@ public class MyGdxGame extends ApplicationAdapter {
 
     batch.begin();
     if (running) {
-      batch.draw(runningAnimation.getKeyFrame(runningTime), playerPosition.x, playerPosition.y, 100f, 100f);
+      TextureRegion frame = runningAnimation.getKeyFrame(runningTime);
+      batch.draw(frame, playerPosition.x, playerPosition.y,
+          PLAYER_SIZE / 2, PLAYER_SIZE / 2,
+          PLAYER_SIZE, PLAYER_SIZE,
+          move.x >= 0 ? 1 : -1, 1,
+          0
+      );
     } else {
       batch.draw(img, playerPosition.x, playerPosition.y, 100f, 100f);
     }
