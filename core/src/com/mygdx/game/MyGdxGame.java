@@ -18,7 +18,7 @@ public class MyGdxGame extends ApplicationAdapter {
   @Override
   public void create() {
     batch = new SpriteBatch();
-    img = new Texture("badlogic.jpg");
+    img = new Texture("player/idle.png");
   }
 
   @Override
@@ -40,7 +40,7 @@ public class MyGdxGame extends ApplicationAdapter {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     batch.begin();
-    batch.draw(img, this.x, this.y);
+    batch.draw(img, this.x, this.y,100f, 100f);
     batch.end();
   }
 
