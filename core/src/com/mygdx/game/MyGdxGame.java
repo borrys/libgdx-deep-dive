@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 public class MyGdxGame extends ApplicationAdapter {
   private static final float PLAYER_SIZE = 100f;
   SpriteBatch batch;
+  SpriteBatch hudBatch;
   TextureRegion img;
   TextureRegion box;
   TextureAtlas atlas;
@@ -28,10 +30,12 @@ public class MyGdxGame extends ApplicationAdapter {
   boolean running;
   float runningTime = 0;
   OrthographicCamera camera;
+  BitmapFont font;
 
   @Override
   public void create() {
     batch = new SpriteBatch();
+    hudBatch = new SpriteBatch();
     atlas = new TextureAtlas("packed/assets.atlas");
     box = atlas.findRegion("box");
     img = atlas.findRegion("idle");
@@ -39,6 +43,7 @@ public class MyGdxGame extends ApplicationAdapter {
     appleFrames.removeRange(0, 4);
     appleAnimation = new Animation<TextureRegion>(0.05f, appleFrames, Animation.PlayMode.LOOP);
     runningAnimation = new Animation<TextureRegion>(0.05f, atlas.findRegions("run"), Animation.PlayMode.LOOP);
+    font = new BitmapFont(Gdx.files.internal("font/font.fnt"));
 
     camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
   }
@@ -100,6 +105,10 @@ public class MyGdxGame extends ApplicationAdapter {
     batch.draw(appleAnimation.getKeyFrame(appleAnimTime), 300, 350, 75, 75);
 
     batch.end();
+
+    hudBatch.begin();
+    font.draw(hudBatch, "Hello, world!", 100, 100);
+    hudBatch.end();
   }
 
   @Override
