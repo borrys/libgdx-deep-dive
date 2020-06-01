@@ -1,11 +1,12 @@
 package com.mygdx.game;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,11 +27,12 @@ public class MyGdxGame extends ApplicationAdapter {
   Vector2 playerPosition = new Vector2();
   float speedX = 200f;
   float speedY = 200f;
-  float appleAnimTime = 0;
   boolean running;
   float runningTime = 0;
   OrthographicCamera camera;
   BitmapFont font;
+
+  Engine engine;
 
   @Override
   public void create() {
@@ -46,6 +48,16 @@ public class MyGdxGame extends ApplicationAdapter {
     font = new BitmapFont(Gdx.files.internal("font/font.fnt"));
 
     camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+    engine = new Engine();
+    engine.addSystem(new AnimationSystem());
+    engine.addSystem(new AnimationRenderingSystem(batch));
+
+    Entity apple = new Entity();
+    apple.add(new AnimationComponent(appleAnimation));
+    apple.add(new PositionComponent(300f, 350f));
+    engine.addEntity(apple);
+
   }
 
   @Override
@@ -70,7 +82,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
     running = !move.isZero();
     playerPosition.add(move);
-    appleAnimTime += time;
     if (running) {
       runningTime += time;
     } else {
@@ -84,6 +95,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
     camera.update();
     batch.setProjectionMatrix(camera.combined);
+
+    engine.update(time);
 
     batch.begin();
     if (running) {
@@ -101,8 +114,6 @@ public class MyGdxGame extends ApplicationAdapter {
     batch.draw(box, 500, 450, 100f, 100f);
     batch.draw(box, 0, 250, 70f, 70f);
     batch.draw(box, 650, -30, 130f, 130f);
-
-    batch.draw(appleAnimation.getKeyFrame(appleAnimTime), 300, 350, 75, 75);
 
     batch.end();
 
