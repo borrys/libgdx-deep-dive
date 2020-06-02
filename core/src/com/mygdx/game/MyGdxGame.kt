@@ -4,109 +4,96 @@ import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.*
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.mygdx.game.components.*
+import com.mygdx.game.systems.*
 
 class MyGdxGame : ApplicationAdapter() {
   lateinit var batch: SpriteBatch
   lateinit var hudBatch: SpriteBatch
-  lateinit var img: TextureRegion
-  lateinit var box: TextureRegion
   lateinit var atlas: TextureAtlas
-  lateinit var appleAnimation: Animation<TextureRegion>
-  lateinit var runningAnimation: Animation<TextureRegion>
   lateinit var camera: OrthographicCamera
   lateinit var font: BitmapFont
   lateinit var engine: Engine
 
-  var playerPosition = Vector2()
-  var speedX = 200f
-  var speedY = 200f
-  var running = false
-  var runningTime = 0f
+  lateinit var playerPositionComponent: PositionComponent
 
   override fun create() {
     batch = SpriteBatch()
     hudBatch = SpriteBatch()
     atlas = TextureAtlas("packed/assets.atlas")
-    box = atlas.findRegion("box")
-    img = atlas.findRegion("idle")
-    val appleFrames = atlas.findRegions("apple")
-    appleFrames.removeRange(0, 4)
-    appleAnimation = Animation(0.05f, appleFrames, Animation.PlayMode.LOOP)
-    runningAnimation = Animation(0.05f, atlas.findRegions("run"), Animation.PlayMode.LOOP)
     font = BitmapFont(Gdx.files.internal("font/font.fnt"))
 
     camera = OrthographicCamera(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
 
+    val idleAnimation = Animation(0.05f, atlas.findRegions("idle"), Animation.PlayMode.LOOP)
+    val runAnimation = Animation(0.05f, atlas.findRegions("run"), Animation.PlayMode.LOOP)
+
     engine = Engine()
+    engine.addSystem(InputSystem())
+    engine.addSystem(PlayerStateSystem(idleAnimation, runAnimation))
+    engine.addSystem(MovementSystem())
+    engine.addSystem(FlippingSystem())
     engine.addSystem(AnimationSystem())
-    engine.addSystem(AnimationRenderingSystem(batch))
+    engine.addSystem(CameraSystem(camera, batch))
+    engine.addSystem(RenderingSystem(batch))
+    engine.addSystem(HudRenderingSystem(hudBatch, font))
+
+    engine.addEntity(appleEntity())
+
+    engine.addEntity(boxEntity(500f, 450f, 100f))
+    engine.addEntity(boxEntity(0f, 250f, 70f))
+    engine.addEntity(boxEntity(650f, -30f, 130f))
 
     engine.addEntity(Entity().apply {
-      add(AnimationComponent(appleAnimation))
-      add(PositionComponent(300f, 350f))
+      add(PositionComponent(100f, 100f))
+      add(TextComponent("hello, world!"))
+    })
+
+    playerPositionComponent = PositionComponent(0f, 0f)
+    engine.addEntity(Entity().apply {
+      add(playerPositionComponent)
+      add(SizeComponent(100f, 100f))
+      add(AnimationComponent(idleAnimation))
+      add(TextureComponent(idleAnimation.getKeyFrame(0f)))
+      add(MoveComponent())
+      add(ScaleComponent())
+      add(PlayerStateComponent())
     })
   }
 
+  private fun appleEntity(): Entity =
+      Entity().apply {
+        val animationComponent = AnimationComponent(Animation(
+            0.05f,
+            atlas.findRegions("apple").apply { removeRange(0, 4) },
+            Animation.PlayMode.LOOP))
+        add(animationComponent)
+        add(TextureComponent(animationComponent.currentFrame))
+        add(PositionComponent(300f, 350f))
+        add(SizeComponent(75f, 75f))
+      }
+
+  private fun boxEntity(x: Float, y: Float, size: Float) =
+      Entity().apply {
+        add(TextureComponent(atlas.findRegion("box")))
+        add(PositionComponent(x, y))
+        add(SizeComponent(size, size))
+      }
+
   override fun render() {
-    val time = Gdx.graphics.deltaTime
-    val move = Vector2()
-    if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-      move.x = -speedX * time
-    } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-      move.x = speedX * time
-    }
-    if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-      move.y = speedY * time
-    } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-      move.y = -speedY * time
-    }
-    val cameraScale = if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) 2f else 1f
-    camera.viewportWidth = Gdx.graphics.width * cameraScale
-    camera.viewportHeight = Gdx.graphics.height * cameraScale
-    running = !move.isZero
-    playerPosition.add(move)
-    if (running) {
-      runningTime += time
-    } else {
-      runningTime = 0f
-    }
-    camera.position.x = playerPosition.x
-    camera.position.y = playerPosition.y + 200
     Gdx.gl.glClearColor(0.9f, 0.9f, 0.9f, 1f)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
-    camera.update()
-    batch.projectionMatrix = camera.combined
-    engine.update(time)
-    batch.begin()
-    if (running) {
-      val frame = runningAnimation.getKeyFrame(runningTime)
-      batch.draw(frame, playerPosition.x, playerPosition.y,
-          PLAYER_SIZE / 2, PLAYER_SIZE / 2,
-          PLAYER_SIZE, PLAYER_SIZE,
-          if (move.x >= 0) 1f else -1f, 1f, 0f)
-    } else {
-      batch.draw(img, playerPosition.x, playerPosition.y, 100f, 100f)
-    }
-    batch.draw(box, 500f, 450f, 100f, 100f)
-    batch.draw(box, 0f, 250f, 70f, 70f)
-    batch.draw(box, 650f, -30f, 130f, 130f)
-    batch.end()
-    hudBatch.begin()
-    font.draw(hudBatch, "Hello, world!", 100f, 100f)
-    hudBatch.end()
+    engine.update(Gdx.graphics.deltaTime)
   }
 
   override fun dispose() {
     batch.dispose()
     atlas.dispose()
-  }
-
-  companion object {
-    private const val PLAYER_SIZE = 100f
   }
 }
