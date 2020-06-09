@@ -14,8 +14,10 @@ class AnimationComponent(animation: Animation<out TextureRegion>) : Component {
 
   var animation = animation
     set(newVal) {
-      field = newVal
-      animationTime = 0f
+      if (newVal != field) {
+        field = newVal
+        animationTime = 0f
+      }
     }
 
   fun updateTime(delta: Float) {

@@ -21,8 +21,6 @@ class MyGdxGame : ApplicationAdapter() {
   lateinit var font: BitmapFont
   lateinit var engine: Engine
 
-  lateinit var playerPositionComponent: PositionComponent
-
   override fun create() {
     batch = SpriteBatch()
     hudBatch = SpriteBatch()
@@ -31,12 +29,9 @@ class MyGdxGame : ApplicationAdapter() {
 
     camera = OrthographicCamera(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
 
-    val idleAnimation = Animation(0.05f, atlas.findRegions("idle"), Animation.PlayMode.LOOP)
-    val runAnimation = Animation(0.05f, atlas.findRegions("run"), Animation.PlayMode.LOOP)
-
     engine = Engine()
     engine.addSystem(InputSystem())
-    engine.addSystem(PlayerStateSystem(idleAnimation, runAnimation))
+    engine.addSystem(PlayerStateSystem())
     engine.addSystem(MovementSystem())
     engine.addSystem(FlippingSystem())
     engine.addSystem(AnimationSystem())
@@ -55,15 +50,21 @@ class MyGdxGame : ApplicationAdapter() {
       add(TextComponent("hello, world!"))
     })
 
-    playerPositionComponent = PositionComponent(0f, 0f)
+    val idleAnimation = Animation(0.05f, atlas.findRegions("idle"), Animation.PlayMode.LOOP)
+    val runAnimation = Animation(0.05f, atlas.findRegions("run"), Animation.PlayMode.LOOP)
     engine.addEntity(Entity().apply {
-      add(playerPositionComponent)
+      add(PositionComponent(0f, 0f))
       add(SizeComponent(100f, 100f))
       add(AnimationComponent(idleAnimation))
       add(TextureComponent(idleAnimation.getKeyFrame(0f)))
       add(MoveComponent())
       add(ScaleComponent())
-      add(PlayerStateComponent())
+      add(PlayerStateComponent(
+          mapOf(
+              PlayerState.IDLE to idleAnimation,
+              PlayerState.RUNNING to runAnimation
+          )
+      ))
     })
   }
 
